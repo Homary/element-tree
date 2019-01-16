@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "bin": {
+    "server": "env.js"
+  },
+  "scripts": {
+    "server": "node bin/env"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parseurl": "^1.3.2",
+    "send": "^0.16.2"
+  }
+}
