@@ -1,0 +1,31 @@
+.sidebar-box{
+	position: relative;
+	.el-menu-vertical-demo{
+		.fullWH();
+		background-color: @sideBarBgColor;
+		overflow-x: hidden;
+		.el-menu-item{
+
+		}
+		.el-submenu:hover, .el-menu-item:hover{
+			background-color: @sideBarHovColor;
+		};
+		.el-menu-item-group{
+			background-color: @sideBarBgColor;
+		}
+		.is-active{
+			color: @mainFontColor !important;
+			background-color: @mainBgColor;
+		}
+	}
+	.sidebar-add-img{
+		position: absolute;
+		left: 50%;
+		bottom: 5px;
+		.square(50px);
+		transform: translateX(-50%);
+		&:hover{
+			opacity: .8;
+		};
+	}
+}

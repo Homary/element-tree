@@ -1,4 +1,4 @@
-const Path = require('path');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Autoprefixer = require('autoprefixer');
@@ -12,11 +12,11 @@ const DevServer = require('./webpack.server.js');
 
 let config = {
 	entry: {
-		main: Path.resolve(__dirname + '/src/index.ts'),
+		main: path.resolve(__dirname + '/src/index.ts'),
 		lib: ['vue']
 	},
 	output: {
-		path: Path.resolve(__dirname + '/build/'),
+		path: path.resolve(__dirname + '/build/'),
 		filename: isProduction ? 'js/[name].min.js' : 'js/[name].js'
 	},
 	module: {
@@ -31,7 +31,7 @@ let config = {
             },
 			{
                 test: /\.js$/,
-                exclude: Path.resolve(__dirname, '/node_modules'),
+                exclude: path.resolve(__dirname, '/node_modules'),
                 loader: 'babel-loader',
                 options: {
                     "presets": ["@babel/preset-env"]
@@ -55,7 +55,13 @@ let config = {
                         options: {
                             plugins: [ new LessFunc() ]
                         }
-                    }]
+                    }, {
+                        loader: 'style-resources-loader',
+                        options: {
+                            patterns: path.resolve(__dirname, './src/style/common.less')
+                        }
+                    }
+                    ]
                 })
             },
             {
@@ -75,8 +81,8 @@ let config = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        outputPath: './img',
-                        publicPath: './img'
+                        outputpath: './img',
+                        publicpath: './img'
                     }
                 }]
             }
@@ -102,15 +108,15 @@ let config = {
         new ExtractTextPlugin('[name].css'),
         new VueLoaderPlugin(),
         new CopyWebpackPlugin([{
-            from: Path.resolve(__dirname, './build'),
-            to: Path.resolve(__dirname, '../server/build'),
+            from: path.resolve(__dirname, './build'),
+            to: path.resolve(__dirname, '../server/build'),
             toType: 'dir'
         }])
     ],
     devServer: isProduction ? '' : DevServer,
     resolve: {
         alias: {
-            '@': Path.resolve(__dirname, 'src')
+            '@': path.resolve(__dirname, 'src')
         },
         extensions: ['.js', '.ts', '.json', '.less', '.css']
     },

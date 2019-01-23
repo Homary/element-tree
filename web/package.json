@@ -31,6 +31,7 @@
 		"less-plugin-functions": "^1.0.0",
 		"postcss-loader": "^3.0.0",
 		"style-loader": "^0.23.1",
+		"style-resources-loader": "^1.2.1",
 		"ts-loader": "^5.3.1",
 		"typescript": "^3.2.1",
 		"vue": "^2.5.17",

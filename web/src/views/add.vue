@@ -1,207 +1,95 @@
 <template>
-	<div class="add-wrapper">
-		<div class="custom-tree-container">
-			<div class="block">
-				<p>项目管理</p>
-				<el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false">
-				<span class="custom-tree-node" slot-scope="{ node, data }">
-    				<span @click= "editLabel">{{ node.label }}</span>
-    				<input 
-    					type="text" 
-    					class="edit-input"
-    					:id="'input'+node.id" 
-    					v-show="activeID === node.id"
-    					v-model="acitveLabel" 
-    					@keyup.enter="enterEdit(node, data)" 
-    					@keyup.esc="cancelEdit()" 
-    				>
-					<span>
-						<el-button
-						type="text"
-						size="mini"
-						@click="() => {editLabel(node.id, node.label)}">
-						Edit
-						</el-button>
-						<el-button
-						type="text"
-						size="mini"
-						@click="() => {append(data)}">
-						Append
-						</el-button>
-						<el-button
-						type="text"
-						size="mini"
-						@click="() => {remove(node, data)}">
-						Delete
-						</el-button>
-			        </span>
-				</span>
-				</el-tree>
-			</div>
-		</div>
-		<div class="btns">
-			<router-link to="/" class="btn-back"><el-button type="info">返回查看</el-button></router-link>
-			<el-button @click="cancel">取消修改</el-button>
-	  		<el-button type="primary" @click="save">保存修改</el-button>
-		</div>
+<div class="add-box">
+	<header class="add-header">
+		<div class="add-input-name"><el-input placeholder="请输入名称" v-model="name"></el-input></div>
+		<el-dropdown @command="(type) => {this.active_type = type}">
+			<el-button type="primary">
+				内容类型<i class="el-icon-arrow-down el-icon--right"></i>
+			</el-button>
+			<el-dropdown-menu slot="dropdown">
+				<el-dropdown-item :command="item.type" 
+				  v-for="item of typeDatas" :key="String(item.type)"
+				>{{item.name}}</el-dropdown-item>
+			</el-dropdown-menu>
+		</el-dropdown>
+	</header>
+	<editTable :isActive="active_type"></editTable>
+	<div class="add-router-view">
+		<router-view></router-view>
 	</div>
+	<div>
+		<el-button style="width: 80px; position: absolute; bottom: 15px; right: 15px" type="primary" @click="submitData">提交</el-button>
+	</div>
+</div>
 </template>
+
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import myMixins from '@/utils/mixins';
-import api from '@/utils/http';
+import {Vue, Component} from 'vue-property-decorator';
+import eventBus from '@/utils/eventBus';
+import editTable from '@/components/editTable/editTable.vue';
 
 @Component({
-	mixins: [myMixins]
+	components: {
+		editTable
+	}
 })
-export default class Main extends Vue {
-	id: number = 1000;
-	activeID: number = -1;
-	acitveLabel: string = ''; 
-	bakLabel: string = '';
-	data: object[] = [];
-
-    mounted(){
-    	this._getData();
-    }
-
-    _getData(){
-    	this.getData().then(data => {
-    		if(Object.prototype.toString.call(data) === '[object Array]'){
-    			this.data = data;
-    		}else{
-    			alert(`获取数据出错! \n 状态码: ${data}`);
-    		}
-    	})
-    }
-    
-	append(data) {
-		const newChild = { id: this.id++, label: '新标签', children: [] };
-		if (!data.children) {
-			this.$set(data, 'children', []);
+export default class Add extends Vue{
+	name: string = '';
+	active_type: string = '';
+	typeDatas = [
+		{
+			name: '表格',
+			type: 'table'
+		},
+		{
+			name: '未开发',
+			type: 'todo'
 		}
-		data.children.push(newChild);
-	}
+	];
 
-	remove(node, data) {
-		const parent = node.parent;
-		const children = parent.data.children || parent.data;
-		const index = children.findIndex(d => d.id === data.id);
-		children.splice(index, 1);
-	}
+	submitData(){
+		eventBus.$emit('submit-data', {
+			name: '',
+			type: '',
+			index: ''
+		});
 
-	renderContent(h, { node, data, store }) {
-		return (
-			`<span class="custom-tree-node">
-            <span>{node.label}</span>
-            <span>
-              <el-button size="mini" type="text" on-click={ () => this.append(data) }>Append</el-button>
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-            </span>
-          </span>`);
-	}
-
-	editLabel(id, label){
-		document.getElementById(`input${id}`).focus();
-
-		this.activeID = id;
-		this.acitveLabel = this.bakLabel = label;
-	}
-
-	enterEdit(node, data){
-		let id = node.id;
-console.log(node.id)
-
-		this.traverseData(id, this.data);
-		this.toggleEditInput();
-	}
-
-	cancelEdit(){
-		this.acitveLabel = this.bakLabel;
-		this.toggleEditInput();
-	}
-
-	toggleEditInput(){
-		this.activeID = -1;
-		this.acitveLabel = '';
-	}
-
-	traverseData(id, data){
-
-		data.map(item => {
-			if(item.$treeNodeId === id){
-				item.label = this.acitveLabel;
-				return;
-			}else if(item.children){
-				this.traverseData(id, item.children);
-			}
+		this.$router.push({
+			path: '/add'
 		})
-	}
-
-	save(){
-		console.log(this.data);
-		api.saveModify(this.data)
-			.then( data => {
-				if(data.result === 200){
-					alert('保存成功')
-				}else{
-					alert(`保存失败:${data}`);
-				}
-			})
-	}
-
-	cancel(){
-		this._getData();
 	}
 }
 </script>
+
 <style lang="less">
-.add-wrapper{
-	.custom-tree-node {
-		position:relative;
-		flex: 1;
+.add-box{
+	display: flex;
+	flex-direction: column;
+	height: @mainHeight;
+	padding: 20px 0 0 20px;
+	box-sizing: border-box;
+	.add-header{
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		font-size: 14px;
-		padding-right: 8px;
-		input[id^="input"]{
-			position: absolute;
-			left: 0;
-			background-color: #fff;
-		    background-image: none;
-		    border-radius: 4px;
-		    border: 1px solid #dcdfe6;
-		    -webkit-box-sizing: border-box;
-		    box-sizing: border-box;
-		    color: #606266;
-		    display: inline-block;
-		    font-size: inherit;
-		    height: 40px;
-		    line-height: 40px;
-		    outline: 0;
-		    padding: 0 15px;
-		    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-		    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-		    width: 100%;
+		.add-input-name{
+			width: 30%;
+			margin-right: 10px;
 		}
 	}
-	.block{
-		p{
-			height: 50px;
-			line-height: 50px;
-			text-align: center;
-			font-weight: bold;
-		}
+	.create-table{
+		margin: 15px 0;
 	}
-	.btns{
-		display: flex;
-		justify-content: flex-end;
-		margin-top: 30px;
-		.btn-back{
-			margin: 0 10px;
-		}
+	.add-router-view{
+		width: calc(100% - 100px);
+		flex: 1 1 60%;
+	}
+	.el-dropdown {
+		vertical-align: top;
+	}
+	.el-dropdown + .el-dropdown {
+		margin-left: 15px;
+	}
+	.el-icon-arrow-down {
+		font-size: 12px;
 	}
 }
-
 </style>

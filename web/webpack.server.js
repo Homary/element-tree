@@ -8,6 +8,6 @@ module.exports = {
         context: ['/data',
             '/update'
         ],
-        target: 'http://192.168.31.65:9090'
+        target: 'http://192.168.31.10:9090'
     }]
 }

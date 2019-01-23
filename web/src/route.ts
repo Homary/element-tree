@@ -1,22 +1,27 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Main from '@/views/main.vue';
 
 Vue.use(VueRouter);
 
-import Main from '@/views/main.vue';
-import Add from '@/views/add.vue';
+const Add = () => import(/* webpackChunkName: "add" */ '@/views/add.vue');
+const AddTable = () => import(/* webpackChunkName: "add" */ '@/components/table/table.vue');
 
 export default new VueRouter({
 	routes: [
 		{
 			path: '/',
-			name: 'main',
 			component: Main
 		},
 		{
 			path: '/add',
-			name: 'add',
-			component: Add
+			component: Add,
+			children: [
+				{
+					path: 'table',
+					component: AddTable
+				}
+			]
 		}
 	]
 })

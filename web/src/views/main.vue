@@ -1,79 +1,48 @@
 <template>
-	<div class="main-wrapper">
-		<p>首页</p>
-		<el-tree
-		  class="el-tree-wrapper"
-		  :data="data"
-		  @node-click="handleNodeClick">
-		</el-tree>
-		<div class="btn">
-			<router-link to="/add"><el-button type="info">编辑</el-button></router-link>
-		</div>
-	</div>
+<div class="main-box">
+	<section>
+		<fieldset>
+			<legend>2019-01-23 完成基础前端页面</legend>
+			<ul>
+				<li>头部组件 `header.vue`</li>
+				<li>侧边导航栏组件 `sidebar.vue`</li>
+				<li>添加页面 `add.vue`
+					<ul>
+						<li>创建表格组件 `editTable.vue`</li>
+					</ul>
+				</li>
+				<li>表格组件 `table.vue`</li>
+			</ul>
+		</fieldset>
+	</section>
+</div>
 </template>
+
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import myMixins from '@/utils/mixins.ts';
+import {Vue, Component} from 'vue-property-decorator';
 
-@Component({
-	mixins: [myMixins]
-})
-export default class Main extends Vue {
-	id: number = 1000;
-	data: object[] = [];
-	defaultProps: {
-          children: 'children',
-          label: 'label'
-        };
+export default class Main extends Vue{
 
-	handleNodeClick(data){
-        let label = data.label;
-console.log(label)
-        if(/http/.test(label)){
-        	let index = label.search(/http/);
-
-        	window.open(label.slice(index));
-        }
-    }
-
-    mounted(){
-    	this._getData();
-    }
-
-    _getData(){
-    	this.getData().then(data => {
-    		if(Object.prototype.toString.call(data) === '[object Array]'){
-    			this.data = data;
-    		}else{
-    			alert(`获取数据出错! \n 状态码: ${data}`);
-    		}
-    	})
-    }
 }
 </script>
+
 <style lang="less">
-.custom-tree-node {
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	font-size: 14px;
-	padding-right: 8px;
-	input[id^="input"]{
-		position: absolute;
-		left: 0;
+.main-box{
+	width: calc(100% - 50px);
+	padding: 15px 0 0 15px;
+	legend{
+		font-size: 130%;
+		font-weight: bolder;
+		color: orange;
 	}
-}
-.main-wrapper{
-	p{
-		height: 50px;
-		line-height: 50px;
-		text-indent: 20%;
-		font-weight: bold;
+	ul{
+		list-style-type: circle;
 	}
-	.btn{
-		display: flex;
-		margin-top: 30px;
+	li{
+		margin: 10px 0;
+	}
+	li ul{
+		margin-left: 30px;
 	}
 }
 </style>

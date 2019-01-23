@@ -1,0 +1,20 @@
+@rowHeight: 40px;
+
+.table-box{
+	.fullWH();
+	display: grid;
+	grid-auto-rows: @rowHeight;
+	.table-row{
+		width: 100%;
+		.table-column-item{
+			height: @rowHeight;
+			line-height: @rowHeight;
+			text-indent: 5px;
+			border: 1px solid #333;
+			box-sizing: border-box;
+		}
+		input.table-column-item{
+			width: 100%;
+		}
+	}
+}
