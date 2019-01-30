@@ -3,6 +3,14 @@ class List {
 		require('./data')(res);
 	}
 
+	'/list' (req, res, params, method){
+		require('./list')(res);
+	}
+
+	'/list/add' (req, res, params, method){
+		require('./addList')(res, params)
+	}
+
 	'/update' (req, res, params, method){
 		require('./update')(res, params);
 	}

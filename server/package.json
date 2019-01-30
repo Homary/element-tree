@@ -7,7 +7,8 @@
     "server": "env.js"
   },
   "scripts": {
-    "server": "node bin/env"
+    "server": "node bin/env",
+    "server:dev": "nodemon bin/env"
   },
   "keywords": [],
   "author": "",

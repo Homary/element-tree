@@ -2,6 +2,7 @@
 <div>
 	<header class="header">
 		<img src="./logo.png" alt="" class="logo">
+		<h3 class="title">DP</h3>
 	</header>
 </div>
 </template>

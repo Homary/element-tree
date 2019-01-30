@@ -76,7 +76,7 @@ let config = {
                 loader: 'vue-loader'
             },
             {
-                test: /\.jpg|\.png|\.jpeg|\.svg|\.ttf|\.woff$/,
+                test: /\.jpg|\.png|\.jpeg|\.svg|\.ttf|\.woff*|\.eot$/,
                 use: [{
                     loader: 'file-loader',
                     options: {

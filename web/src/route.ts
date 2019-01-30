@@ -5,7 +5,7 @@ import Main from '@/views/main.vue';
 Vue.use(VueRouter);
 
 const Add = () => import(/* webpackChunkName: "add" */ '@/views/add.vue');
-const AddTable = () => import(/* webpackChunkName: "add" */ '@/components/table/table.vue');
+const Panel = () => import(/* webpackChunkName: "panel" */ '@/views/panel.vue');
 
 export default new VueRouter({
 	routes: [
@@ -15,13 +15,11 @@ export default new VueRouter({
 		},
 		{
 			path: '/add',
-			component: Add,
-			children: [
-				{
-					path: 'table',
-					component: AddTable
-				}
-			]
+			component: Add
+		},
+		{
+			path: '/panel*',
+			component: Panel
 		}
 	]
 })
